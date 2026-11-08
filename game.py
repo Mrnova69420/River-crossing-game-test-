@@ -6,7 +6,7 @@ st.set_page_config(page_title="River Crossing - Pro Edition", page_icon="🚣", 
 # Remove Streamlit default whitespace & headers
 st.markdown("""
 <style>
-    .block-container { padding: 0.5rem 0.5rem !important; max-width: 100% !important; }
+    .block-container { padding: 0.4rem 0.4rem !important; max-width: 100% !important; }
     header[data-testid="stHeader"] { display: none !important; }
     footer { display: none !important; }
     #MainMenu { visibility: hidden; }
@@ -27,12 +27,12 @@ game_html = """
     h1, h2, h3, .title-text, .bank-header, .btn, .action-btn, .modal-title, .avatar-card { font-family: 'Fredoka', cursive; }
 
     body {
-        margin: 0; padding: clamp(6px, 1.5vw, 14px); background: #080c14;
+        margin: 0; padding: clamp(4px, 1.2vw, 12px); background: #080c14;
         background-image: radial-gradient(circle at 50% 0%, #151d2a 0%, #080c14 75%);
         color: #f0f6fc; min-height: 100vh; position: relative; overflow-x: hidden;
     }
 
-    /* --- CENTERED DESKTOP GAME CONTAINER --- */
+    /* CENTERED PC CONTAINER */
     .game-wrapper {
         max-width: 920px;
         margin: 0 auto;
@@ -41,12 +41,12 @@ game_html = """
         position: relative;
     }
 
-    /* --- TOP BAR --- */
+    /* TOP BAR */
     .top-bar {
         display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
         background: rgba(22, 30, 44, 0.88); backdrop-filter: blur(16px);
         padding: clamp(8px, 1.2vw, 12px) clamp(10px, 1.6vw, 16px);
-        border-radius: 16px; margin-bottom: 10px; gap: 8px;
+        border-radius: 16px; margin-bottom: 8px; gap: 6px;
         border: 1px solid rgba(255, 255, 255, 0.1);
         box-shadow: 0 8px 32px rgba(0,0,0,0.5);
     }
@@ -55,14 +55,14 @@ game_html = """
 
     .select-control {
         background: #1e293b; color: #f8fafc; border: 1px solid #334155;
-        padding: 6px 10px; border-radius: 10px; font-weight: 700; font-size: 12px;
+        padding: 5px 9px; border-radius: 10px; font-weight: 700; font-size: 12px;
         cursor: pointer; outline: none; transition: all 0.2s;
     }
 
-    /* 3D TACTILE BUTTONS */
+    /* 3D BUTTONS */
     .btn {
         background: #2563eb; color: white; border: none;
-        padding: 6px 12px; border-radius: 10px; font-weight: 700; font-size: 12px; cursor: pointer;
+        padding: 6px 11px; border-radius: 10px; font-weight: 700; font-size: 12px; cursor: pointer;
         box-shadow: 0 3px 0 #1d4ed8; transition: all 0.1s ease; outline: none;
     }
     .btn:active:not(:disabled) { transform: translateY(2px); box-shadow: 0 1px 0 #1d4ed8; }
@@ -76,13 +76,13 @@ game_html = """
 
     .stat-badge {
         background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(255, 255, 255, 0.12);
-        padding: 5px 10px; border-radius: 10px; font-weight: 700; font-size: 12px;
+        padding: 4px 9px; border-radius: 10px; font-weight: 700; font-size: 12px;
         display: flex; align-items: center; gap: 4px;
     }
     .timer-warning { color: #ef4444 !important; animation: pulse 1s infinite; }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-    /* VOLUME CONTROLS PANEL */
+    /* VOLUME PANEL */
     .volume-panel {
         display: none; position: absolute; top: 55px; right: 10px;
         background: #1e293b; border: 1px solid rgba(255,255,255,0.15);
@@ -95,8 +95,8 @@ game_html = """
 
     /* STATUS ALERTS */
     #status-box {
-        padding: 10px 16px; border-radius: 12px; font-weight: 700; font-size: 14px;
-        margin-bottom: 10px; display: flex; align-items: center; gap: 8px;
+        padding: 9px 14px; border-radius: 12px; font-weight: 700; font-size: 13px;
+        margin-bottom: 8px; display: flex; align-items: center; gap: 8px;
         background: rgba(30, 58, 138, 0.35); border: 1px solid rgba(96, 165, 250, 0.4); color: #93c5fd;
         box-shadow: 0 4px 15px rgba(0,0,0,0.25); transition: all 0.3s;
     }
@@ -111,21 +111,21 @@ game_html = """
     }
 
     .bank {
-        width: 26%;
+        width: 27%;
         background: linear-gradient(180deg, #15803d 0%, #166534 60%, #14532d 100%);
         display: flex; flex-direction: column; align-items: center;
-        padding: 12px 6px; position: relative; z-index: 2; overflow: hidden;
+        padding: 10px 4px; position: relative; z-index: 2; overflow: hidden;
     }
-    .bank-left { border-right: 7px solid #78350f; }
-    .bank-right { border-left: 7px solid #78350f; }
+    .bank-left { border-right: 6px solid #78350f; }
+    .bank-right { border-left: 6px solid #78350f; }
     
     .bank-header {
-        font-size: 16px; font-weight: 700; margin-bottom: 12px; color: #fef08a;
+        font-size: 15px; font-weight: 700; margin-bottom: 10px; color: #fef08a;
         text-shadow: 0 2px 4px rgba(0,0,0,0.4); text-align: center;
     }
 
     .river {
-        width: 48%;
+        width: 46%;
         background: linear-gradient(180deg, #0284c7 0%, #0369a1 50%, #075985 100%);
         position: relative; overflow: hidden;
     }
@@ -143,10 +143,10 @@ game_html = """
 
     /* WOODEN BOAT */
     .boat {
-        position: absolute; bottom: 25px;
-        width: 155px; height: 68px;
+        position: absolute; bottom: 22px;
+        width: 145px; height: 64px;
         background: linear-gradient(180deg, #a16207 0%, #713f12 100%);
-        border: 2.5px solid #451a03; border-radius: 4px 4px 42px 42px;
+        border: 2.5px solid #451a03; border-radius: 4px 4px 40px 40px;
         box-shadow: 0 12px 24px rgba(0,0,0,0.5);
         display: flex; justify-content: space-evenly; align-items: center; padding: 0 4px;
         transition: left 1.4s cubic-bezier(0.45, 0, 0.55, 1); z-index: 10;
@@ -156,53 +156,53 @@ game_html = """
         0%, 100% { transform: translateY(0) rotate(0deg); }
         50% { transform: translateY(-4px) rotate(-1.5deg); }
     }
-    .boat-left { left: 8px; }
-    .boat-right { left: calc(100% - 163px); }
+    .boat-left { left: 6px; }
+    .boat-right { left: calc(100% - 151px); }
 
-    /* CHARACTER CARDS */
+    /* CHARACTER AVATAR CARDS */
     .entity-container {
-        display: flex; flex-direction: column; gap: 8px;
-        align-items: center; width: 100%; padding: 0 4px;
+        display: flex; flex-direction: column; gap: 7px;
+        align-items: center; width: 100%; padding: 0 2px;
     }
     
     .avatar-card {
         background: rgba(15, 23, 42, 0.92); backdrop-filter: blur(8px);
         border: 1.5px solid rgba(255, 255, 255, 0.15); border-radius: 12px;
-        padding: 5px 8px; display: flex; align-items: center; gap: 8px;
+        padding: 5px 8px; display: flex; align-items: center; gap: 6px;
         font-weight: 700; font-size: 13px; color: #f8fafc; cursor: pointer;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.3); width: 100%; max-width: 180px; box-sizing: border-box;
-        overflow: hidden; transition: all 0.2s ease;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3); width: 100%; max-width: 170px; box-sizing: border-box;
+        transition: all 0.2s ease;
     }
-    .avatar-card span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
+    .avatar-card span { white-space: nowrap; flex: 1; }
     .avatar-card:hover { transform: translateY(-2px); border-color: #60a5fa; box-shadow: 0 6px 14px rgba(96, 165, 250, 0.4); }
     .avatar-card:active { transform: scale(0.97); }
 
     .avatar-badge {
-        width: 28px; height: 28px; border-radius: 50%;
+        width: 26px; height: 26px; border-radius: 50%;
         display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-        font-size: 15px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+        font-size: 14px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
     }
     .badge-farmer { background: linear-gradient(135deg, #f59e0b, #b45309); border: 1.5px solid #fef08a; }
     .badge-wolf { background: linear-gradient(135deg, #ef4444, #991b1b); border: 1.5px solid #fca5a5; }
     .badge-sheep { background: linear-gradient(135deg, #38bdf8, #0369a1); border: 1.5px solid #e0f2fe; }
     .badge-cabbage { background: linear-gradient(135deg, #22c55e, #15803d); border: 1.5px solid #bbf7d0; }
 
-    /* IN-BOAT CARD OVERRIDES */
+    /* IN-BOAT CARDS */
     .boat .avatar-card {
-        padding: 3px 4px !important; font-size: 11px !important; gap: 4px !important;
+        padding: 3px 4px !important; font-size: 11px !important; gap: 3px !important;
         border-radius: 8px !important; max-width: 48% !important; background: rgba(15, 23, 42, 0.95) !important;
     }
-    .boat .avatar-badge { width: 22px !important; height: 22px !important; font-size: 12px !important; }
+    .boat .avatar-badge { width: 20px !important; height: 20px !important; font-size: 11px !important; }
 
-    /* ACTION CONTROLS GRID */
-    .controls-wrapper { margin-top: 12px; }
-    .controls-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    /* CONTROLS GRID */
+    .controls-wrapper { margin-top: 10px; }
+    .controls-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
     
     .action-btn {
         background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
-        color: white; border: none; padding: 13px 8px;
-        border-radius: 14px; font-size: 14px; font-weight: 700; cursor: pointer;
-        transition: all 0.15s ease; display: flex; align-items: center; justify-content: center; gap: 6px;
+        color: white; border: none; padding: 12px 6px;
+        border-radius: 14px; font-size: 13.5px; font-weight: 700; cursor: pointer;
+        transition: all 0.15s ease; display: flex; align-items: center; justify-content: center; gap: 5px;
         box-shadow: 0 4px 0 #1e40af, 0 6px 14px rgba(37, 99, 235, 0.35);
     }
     .action-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 0 #1e40af; filter: brightness(1.08); }
@@ -236,19 +236,58 @@ game_html = """
 
     #confetti-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
 
-    /* MOBILE BREAKPOINTS */
+    /* MOBILE PORTRAIT OVERRIDES */
     @media (max-width: 680px) {
-        .top-bar { flex-direction: column; gap: 6px; align-items: stretch; }
-        .title-text { justify-content: center; }
-        .right-top-controls { justify-content: center; }
-        .bank { width: 30%; }
-        .river { width: 40%; }
-        .boat { width: 115px; height: 58px; bottom: 18px; }
-        .boat-left { left: 4px; }
-        .boat-right { left: calc(100% - 119px); }
-        .avatar-card { max-width: 100%; }
+        .top-bar { flex-direction: column; gap: 6px; align-items: stretch; padding: 8px 10px; }
+        .title-text { justify-content: center; font-size: 18px; }
+        .right-top-controls { justify-content: center; gap: 4px; }
+        .select-control, .btn { padding: 5px 8px; font-size: 11px; }
+
+        .stage { height: 300px; }
+        .bank { width: 35%; padding: 8px 3px; }
+        .river { width: 30%; }
+        
+        .bank-header { font-size: 13px; margin-bottom: 8px; }
+
+        .boat { width: 98px; height: 52px; bottom: 15px; }
+        .boat-left { left: 2px; }
+        .boat-right { left: calc(100% - 100px); }
+
+        .entity-container { gap: 6px; padding: 0 1px; }
+
+        .avatar-card {
+            padding: 4px 4px;
+            gap: 4px;
+            border-radius: 10px;
+            max-width: 100%;
+        }
+        .avatar-badge {
+            width: 22px;
+            height: 22px;
+            font-size: 13px;
+        }
+        .avatar-card span {
+            font-size: 11px;
+            letter-spacing: -0.3px;
+            white-space: nowrap;
+            overflow: visible;
+        }
+
+        .boat .avatar-card {
+            padding: 2px 3px !important;
+            font-size: 9.5px !important;
+            gap: 2px !important;
+            border-radius: 6px !important;
+            max-width: 48% !important;
+        }
+        .boat .avatar-badge {
+            width: 16px !important;
+            height: 16px !important;
+            font-size: 10px !important;
+        }
+
         .controls-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
-        .action-btn { font-size: 13px; padding: 12px 4px; }
+        .action-btn { font-size: 12.5px; padding: 11px 4px; }
     }
 </style>
 </head>
