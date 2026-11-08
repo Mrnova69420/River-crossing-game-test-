@@ -1,12 +1,12 @@
 import streamlit as st
 import streamlit.components.v1 as components
 
-st.set_page_config(page_title="River Crossing - Mobile Fix", page_icon="🚣", layout="wide", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="River Crossing - Pro Edition", page_icon="🚣", layout="wide", initial_sidebar_state="collapsed")
 
-# Remove Streamlit default whitespace & headers on mobile browsers
+# Remove Streamlit default whitespace & headers
 st.markdown("""
 <style>
-    .block-container { padding: 0.2rem 0.4rem !important; max-width: 100% !important; }
+    .block-container { padding: 0.5rem 0.5rem !important; max-width: 100% !important; }
     header[data-testid="stHeader"] { display: none !important; }
     footer { display: none !important; }
     #MainMenu { visibility: hidden; }
@@ -27,9 +27,18 @@ game_html = """
     h1, h2, h3, .title-text, .bank-header, .btn, .action-btn, .modal-title, .avatar-card { font-family: 'Fredoka', cursive; }
 
     body {
-        margin: 0; padding: clamp(4px, 1.2vw, 12px); background: #080c14;
+        margin: 0; padding: clamp(6px, 1.5vw, 14px); background: #080c14;
         background-image: radial-gradient(circle at 50% 0%, #151d2a 0%, #080c14 75%);
         color: #f0f6fc; min-height: 100vh; position: relative; overflow-x: hidden;
+    }
+
+    /* --- CENTERED DESKTOP GAME CONTAINER --- */
+    .game-wrapper {
+        max-width: 920px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        position: relative;
     }
 
     /* --- TOP BAR --- */
@@ -37,7 +46,7 @@ game_html = """
         display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
         background: rgba(22, 30, 44, 0.88); backdrop-filter: blur(16px);
         padding: clamp(8px, 1.2vw, 12px) clamp(10px, 1.6vw, 16px);
-        border-radius: 16px; margin-bottom: 8px; gap: 6px;
+        border-radius: 16px; margin-bottom: 10px; gap: 8px;
         border: 1px solid rgba(255, 255, 255, 0.1);
         box-shadow: 0 8px 32px rgba(0,0,0,0.5);
     }
@@ -46,16 +55,14 @@ game_html = """
 
     .select-control {
         background: #1e293b; color: #f8fafc; border: 1px solid #334155;
-        padding: clamp(5px, 0.8vw, 7px) clamp(6px, 1vw, 10px);
-        border-radius: 10px; font-weight: 700; font-size: clamp(11px, 1.2vw, 13px);
+        padding: 6px 10px; border-radius: 10px; font-weight: 700; font-size: 12px;
         cursor: pointer; outline: none; transition: all 0.2s;
     }
 
     /* 3D TACTILE BUTTONS */
     .btn {
         background: #2563eb; color: white; border: none;
-        padding: clamp(6px, 0.9vw, 8px) clamp(8px, 1.2vw, 12px);
-        border-radius: 10px; font-weight: 700; font-size: clamp(11px, 1.2vw, 13px); cursor: pointer;
+        padding: 6px 12px; border-radius: 10px; font-weight: 700; font-size: 12px; cursor: pointer;
         box-shadow: 0 3px 0 #1d4ed8; transition: all 0.1s ease; outline: none;
     }
     .btn:active:not(:disabled) { transform: translateY(2px); box-shadow: 0 1px 0 #1d4ed8; }
@@ -69,18 +76,18 @@ game_html = """
 
     .stat-badge {
         background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(255, 255, 255, 0.12);
-        padding: 5px clamp(6px, 1vw, 10px); border-radius: 10px; font-weight: 700;
-        font-size: clamp(11px, 1.2vw, 13px); display: flex; align-items: center; gap: 4px;
+        padding: 5px 10px; border-radius: 10px; font-weight: 700; font-size: 12px;
+        display: flex; align-items: center; gap: 4px;
     }
     .timer-warning { color: #ef4444 !important; animation: pulse 1s infinite; }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
     /* VOLUME CONTROLS PANEL */
     .volume-panel {
-        display: none; position: absolute; top: 60px; right: 10px;
+        display: none; position: absolute; top: 55px; right: 10px;
         background: #1e293b; border: 1px solid rgba(255,255,255,0.15);
         padding: 12px 14px; border-radius: 14px; box-shadow: 0 12px 30px rgba(0,0,0,0.7);
-        z-index: 100; flex-direction: column; gap: 8px; width: min(200px, 85vw);
+        z-index: 100; flex-direction: column; gap: 8px; width: 190px;
     }
     .volume-panel.active { display: flex; }
     .vol-row { display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 700; }
@@ -88,9 +95,8 @@ game_html = """
 
     /* STATUS ALERTS */
     #status-box {
-        padding: clamp(8px, 1.2vw, 12px) clamp(10px, 1.6vw, 16px);
-        border-radius: 12px; font-weight: 700; font-size: clamp(13px, 1.5vw, 16px);
-        margin-bottom: 8px; display: flex; align-items: center; gap: 8px;
+        padding: 10px 16px; border-radius: 12px; font-weight: 700; font-size: 14px;
+        margin-bottom: 10px; display: flex; align-items: center; gap: 8px;
         background: rgba(30, 58, 138, 0.35); border: 1px solid rgba(96, 165, 250, 0.4); color: #93c5fd;
         box-shadow: 0 4px 15px rgba(0,0,0,0.25); transition: all 0.3s;
     }
@@ -99,27 +105,27 @@ game_html = """
 
     /* STAGE BOARD */
     .stage {
-        display: flex; height: clamp(280px, 42vh, 350px); border-radius: 18px; overflow: hidden;
+        display: flex; height: 340px; border-radius: 20px; overflow: hidden;
         box-shadow: 0 20px 50px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.1);
-        position: relative; border: 2px solid #1e293b;
+        position: relative; border: 2px solid #1e293b; width: 100%;
     }
 
     .bank {
-        width: 32%;
+        width: 26%;
         background: linear-gradient(180deg, #15803d 0%, #166534 60%, #14532d 100%);
         display: flex; flex-direction: column; align-items: center;
-        padding: 10px 4px; position: relative; z-index: 2; overflow: hidden;
+        padding: 12px 6px; position: relative; z-index: 2; overflow: hidden;
     }
-    .bank-left { border-right: clamp(4px, 0.8vw, 8px) solid #78350f; }
-    .bank-right { border-left: clamp(4px, 0.8vw, 8px) solid #78350f; }
+    .bank-left { border-right: 7px solid #78350f; }
+    .bank-right { border-left: 7px solid #78350f; }
     
     .bank-header {
-        font-size: clamp(14px, 1.8vw, 17px); font-weight: 700; margin-bottom: 10px; color: #fef08a;
+        font-size: 16px; font-weight: 700; margin-bottom: 12px; color: #fef08a;
         text-shadow: 0 2px 4px rgba(0,0,0,0.4); text-align: center;
     }
 
     .river {
-        width: 36%;
+        width: 48%;
         background: linear-gradient(180deg, #0284c7 0%, #0369a1 50%, #075985 100%);
         position: relative; overflow: hidden;
     }
@@ -135,14 +141,14 @@ game_html = """
     }
     @keyframes flow { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-    /* WOODEN BOAT & RESPONSIVE POSITIONING */
+    /* WOODEN BOAT */
     .boat {
-        position: absolute; bottom: clamp(15px, 3vh, 28px);
-        width: clamp(110px, 92%, 155px); height: clamp(52px, 8vh, 68px);
+        position: absolute; bottom: 25px;
+        width: 155px; height: 68px;
         background: linear-gradient(180deg, #a16207 0%, #713f12 100%);
         border: 2.5px solid #451a03; border-radius: 4px 4px 42px 42px;
         box-shadow: 0 12px 24px rgba(0,0,0,0.5);
-        display: flex; justify-content: space-evenly; align-items: center; padding: 0 3px;
+        display: flex; justify-content: space-evenly; align-items: center; padding: 0 4px;
         transition: left 1.4s cubic-bezier(0.45, 0, 0.55, 1); z-index: 10;
         animation: floatBob 3s ease-in-out infinite;
     }
@@ -150,61 +156,56 @@ game_html = """
         0%, 100% { transform: translateY(0) rotate(0deg); }
         50% { transform: translateY(-4px) rotate(-1.5deg); }
     }
-    .boat-left { left: 4px; }
-    .boat-right { left: calc(100% - clamp(114px, 92% + 4px, 159px)); }
+    .boat-left { left: 8px; }
+    .boat-right { left: calc(100% - 163px); }
 
-    /* CHARACTER AVATAR CARDS (STRICT CONTAINMENT) */
+    /* CHARACTER CARDS */
     .entity-container {
-        display: flex; flex-direction: column; gap: 6px;
-        align-items: center; width: 100%; padding: 0 2px;
+        display: flex; flex-direction: column; gap: 8px;
+        align-items: center; width: 100%; padding: 0 4px;
     }
     
     .avatar-card {
         background: rgba(15, 23, 42, 0.92); backdrop-filter: blur(8px);
         border: 1.5px solid rgba(255, 255, 255, 0.15); border-radius: 12px;
-        padding: 4px 6px; display: flex; align-items: center; gap: 6px;
-        font-weight: 700; font-size: clamp(12px, 1.4vw, 14px); color: #f8fafc; cursor: pointer;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.3); width: 100%; max-width: 100%; box-sizing: border-box;
-        overflow: hidden;
+        padding: 5px 8px; display: flex; align-items: center; gap: 8px;
+        font-weight: 700; font-size: 13px; color: #f8fafc; cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3); width: 100%; max-width: 180px; box-sizing: border-box;
+        overflow: hidden; transition: all 0.2s ease;
     }
     .avatar-card span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
+    .avatar-card:hover { transform: translateY(-2px); border-color: #60a5fa; box-shadow: 0 6px 14px rgba(96, 165, 250, 0.4); }
     .avatar-card:active { transform: scale(0.97); }
 
     .avatar-badge {
-        width: clamp(24px, 2.8vw, 32px); height: clamp(24px, 2.8vw, 32px); border-radius: 50%;
+        width: 28px; height: 28px; border-radius: 50%;
         display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-        font-size: clamp(13px, 1.6vw, 17px); box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+        font-size: 15px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
     }
     .badge-farmer { background: linear-gradient(135deg, #f59e0b, #b45309); border: 1.5px solid #fef08a; }
     .badge-wolf { background: linear-gradient(135deg, #ef4444, #991b1b); border: 1.5px solid #fca5a5; }
     .badge-sheep { background: linear-gradient(135deg, #38bdf8, #0369a1); border: 1.5px solid #e0f2fe; }
     .badge-cabbage { background: linear-gradient(135deg, #22c55e, #15803d); border: 1.5px solid #bbf7d0; }
 
-    /* IN-BOAT CARD COMPACT OVERRIDERS */
+    /* IN-BOAT CARD OVERRIDES */
     .boat .avatar-card {
-        padding: 3px 4px !important;
-        font-size: 11px !important;
-        gap: 3px !important;
-        border-radius: 8px !important;
-        max-width: 49% !important;
-        background: rgba(15, 23, 42, 0.95) !important;
+        padding: 3px 4px !important; font-size: 11px !important; gap: 4px !important;
+        border-radius: 8px !important; max-width: 48% !important; background: rgba(15, 23, 42, 0.95) !important;
     }
-    .boat .avatar-badge {
-        width: 20px !important; height: 20px !important;
-        font-size: 11px !important;
-    }
+    .boat .avatar-badge { width: 22px !important; height: 22px !important; font-size: 12px !important; }
 
     /* ACTION CONTROLS GRID */
-    .controls-wrapper { margin-top: 10px; }
-    .controls-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(6px, 1vw, 10px); }
+    .controls-wrapper { margin-top: 12px; }
+    .controls-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
     
     .action-btn {
         background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
-        color: white; border: none; padding: clamp(10px, 1.4vw, 14px) clamp(4px, 0.8vw, 8px);
-        border-radius: 14px; font-size: clamp(13px, 1.6vw, 15px); font-weight: 700; cursor: pointer;
+        color: white; border: none; padding: 13px 8px;
+        border-radius: 14px; font-size: 14px; font-weight: 700; cursor: pointer;
         transition: all 0.15s ease; display: flex; align-items: center; justify-content: center; gap: 6px;
         box-shadow: 0 4px 0 #1e40af, 0 6px 14px rgba(37, 99, 235, 0.35);
     }
+    .action-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 0 #1e40af; filter: brightness(1.08); }
     .action-btn:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 #1e40af; }
     .action-btn:disabled { background: #1e293b !important; color: #475569 !important; cursor: not-allowed; box-shadow: none !important; transform: none !important; }
 
@@ -235,11 +236,17 @@ game_html = """
 
     #confetti-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
 
-    /* MOBILE PORTRAIT MEDIA BREAKPOINTS */
-    @media (max-width: 640px) {
+    /* MOBILE BREAKPOINTS */
+    @media (max-width: 680px) {
         .top-bar { flex-direction: column; gap: 6px; align-items: stretch; }
         .title-text { justify-content: center; }
         .right-top-controls { justify-content: center; }
+        .bank { width: 30%; }
+        .river { width: 40%; }
+        .boat { width: 115px; height: 58px; bottom: 18px; }
+        .boat-left { left: 4px; }
+        .boat-right { left: calc(100% - 119px); }
+        .avatar-card { max-width: 100%; }
         .controls-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
         .action-btn { font-size: 13px; padding: 12px 4px; }
     }
@@ -249,86 +256,88 @@ game_html = """
 
 <canvas id="confetti-canvas"></canvas>
 
-<div class="top-bar">
-    <div class="title-text" id="title-text">🚣 River Crossing</div>
-    <div class="right-top-controls">
-        <select class="select-control" id="mode-select" onchange="changeMode(this.value)">
-            <option value="relaxed">🧘 Relaxed</option>
-            <option value="timed">⏱️ Timed (60s)</option>
-        </select>
+<div class="game-wrapper">
+    <div class="top-bar">
+        <div class="title-text" id="title-text">🚣 River Crossing</div>
+        <div class="right-top-controls">
+            <select class="select-control" id="mode-select" onchange="changeMode(this.value)">
+                <option value="relaxed">🧘 Relaxed</option>
+                <option value="timed">⏱️ Timed (60s)</option>
+            </select>
 
-        <select class="select-control" id="speed-select" onchange="changeSpeed(this.value)">
-            <option value="normal">🌊 Normal</option>
-            <option value="fast">⚡ Fast</option>
-        </select>
+            <select class="select-control" id="speed-select" onchange="changeSpeed(this.value)">
+                <option value="normal">🌊 Normal</option>
+                <option value="fast">⚡ Fast</option>
+            </select>
 
-        <select class="select-control" id="lang-select" onchange="switchLanguage(this.value)">
-            <option value="en">🇬🇧 EN</option>
-            <option value="mn">🇲🇳 MN</option>
-        </select>
-        
-        <button class="btn btn-audio active" id="btn-sfx" onclick="toggleSfx()">🔊 SFX</button>
-        <button class="btn btn-audio" id="btn-bgm" onclick="toggleBgm()">🎵 Music</button>
-        <button class="btn btn-audio" onclick="toggleVolumePanel()">🎚️ Vol</button>
-        
-        <button class="btn btn-undo" id="btn-undo-text" onclick="undoMove()">↩️ Undo</button>
-        <button class="btn btn-solve" id="btn-solve-text" onclick="autoSolve()">🤖 Solve</button>
-        
-        <div class="stat-badge" id="timer-container" style="display:none;">
-            ⏱️ <span id="timer-val">60</span>s
-        </div>
-        <div class="stat-badge">
-            <span id="moves-label">Moves:</span> <span id="move-count" style="color:#60a5fa;">0</span>
-        </div>
-        
-        <button class="btn btn-reset" onclick="restartGame()" id="reset-btn-text">🔄 Reset</button>
-    </div>
-</div>
-
-<!-- FLOATING VOLUME PANEL -->
-<div class="volume-panel" id="vol-panel">
-    <div class="vol-row">
-        <span>🔊 SFX Volume</span>
-        <input type="range" id="vol-sfx" min="0" max="1" step="0.1" value="0.8" oninput="setSfxVol(this.value)">
-    </div>
-    <div class="vol-row">
-        <span>🎵 BGM Volume</span>
-        <input type="range" id="vol-bgm" min="0" max="1" step="0.1" value="0.5" oninput="setBgmVol(this.value)">
-    </div>
-</div>
-
-<div id="status-box">💡 Tap a character card or action button to cross!</div>
-
-<!-- BOARD -->
-<div class="stage">
-    <div class="bank bank-left">
-        <div class="bank-header" id="left-header">🌱 Left Shore</div>
-        <div class="entity-container" id="left-entities"></div>
-    </div>
-
-    <div class="river">
-        <div class="river-wave-1"></div>
-        <div class="river-wave-2"></div>
-        
-        <div class="boat boat-left" id="boat">
-            <div id="boat-slot-1"></div>
-            <div id="boat-slot-2"></div>
+            <select class="select-control" id="lang-select" onchange="switchLanguage(this.value)">
+                <option value="en">🇬🇧 EN</option>
+                <option value="mn">🇲🇳 MN</option>
+            </select>
+            
+            <button class="btn btn-audio active" id="btn-sfx" onclick="toggleSfx()">🔊 SFX</button>
+            <button class="btn btn-audio" id="btn-bgm" onclick="toggleBgm()">🎵 Music</button>
+            <button class="btn btn-audio" onclick="toggleVolumePanel()">🎚️ Vol</button>
+            
+            <button class="btn btn-undo" id="btn-undo-text" onclick="undoMove()">↩️ Undo</button>
+            <button class="btn btn-solve" id="btn-solve-text" onclick="autoSolve()">🤖 Solve</button>
+            
+            <div class="stat-badge" id="timer-container" style="display:none;">
+                ⏱️ <span id="timer-val">60</span>s
+            </div>
+            <div class="stat-badge">
+                <span id="moves-label">Moves:</span> <span id="move-count" style="color:#60a5fa;">0</span>
+            </div>
+            
+            <button class="btn btn-reset" onclick="restartGame()" id="reset-btn-text">🔄 Reset</button>
         </div>
     </div>
 
-    <div class="bank bank-right">
-        <div class="bank-header" id="right-header">🌴 Right Shore</div>
-        <div class="entity-container" id="right-entities"></div>
+    <!-- FLOATING VOLUME PANEL -->
+    <div class="volume-panel" id="vol-panel">
+        <div class="vol-row">
+            <span>🔊 SFX Volume</span>
+            <input type="range" id="vol-sfx" min="0" max="1" step="0.1" value="0.8" oninput="setSfxVol(this.value)">
+        </div>
+        <div class="vol-row">
+            <span>🎵 BGM Volume</span>
+            <input type="range" id="vol-bgm" min="0" max="1" step="0.1" value="0.5" oninput="setBgmVol(this.value)">
+        </div>
     </div>
-</div>
 
-<!-- CONTROLS GRID -->
-<div class="controls-wrapper">
-    <div class="controls-grid">
-        <button class="action-btn" id="btn-alone" onclick="makeMove(null)">🚣 Cross Alone</button>
-        <button class="action-btn" id="btn-wolf" onclick="makeMove('Wolf')">🐺 Take Wolf</button>
-        <button class="action-btn" id="btn-sheep" onclick="makeMove('Sheep')">🐑 Take Sheep</button>
-        <button class="action-btn" id="btn-cabbage" onclick="makeMove('Cabbage')">🥬 Take Cabbage</button>
+    <div id="status-box">💡 Tap a character card or action button to cross!</div>
+
+    <!-- BOARD -->
+    <div class="stage">
+        <div class="bank bank-left">
+            <div class="bank-header" id="left-header">🌱 Left Shore</div>
+            <div class="entity-container" id="left-entities"></div>
+        </div>
+
+        <div class="river">
+            <div class="river-wave-1"></div>
+            <div class="river-wave-2"></div>
+            
+            <div class="boat boat-left" id="boat">
+                <div id="boat-slot-1"></div>
+                <div id="boat-slot-2"></div>
+            </div>
+        </div>
+
+        <div class="bank bank-right">
+            <div class="bank-header" id="right-header">🌴 Right Shore</div>
+            <div class="entity-container" id="right-entities"></div>
+        </div>
+    </div>
+
+    <!-- CONTROLS GRID -->
+    <div class="controls-wrapper">
+        <div class="controls-grid">
+            <button class="action-btn" id="btn-alone" onclick="makeMove(null)">🚣 Cross Alone</button>
+            <button class="action-btn" id="btn-wolf" onclick="makeMove('Wolf')">🐺 Take Wolf</button>
+            <button class="action-btn" id="btn-sheep" onclick="makeMove('Sheep')">🐑 Take Sheep</button>
+            <button class="action-btn" id="btn-cabbage" onclick="makeMove('Cabbage')">🥬 Take Cabbage</button>
+        </div>
     </div>
 </div>
 
@@ -820,4 +829,4 @@ game_html = """
 </html>
 """
 
-components.html(game_html, height=760, scrolling=False)
+components.html(game_html, height=750, scrolling=False)
